@@ -1,5 +1,7 @@
 # National and State Parks Map
 
+Access: https://sambingham0.github.io/GISParksMap/
+
 ## Overview
 
 To expand my skills as a software developer, I decided to gain hands-on experience with **ArcGIS** by creating an interactive map application.
