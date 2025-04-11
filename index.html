@@ -34,8 +34,9 @@
             "esri/Map",
             "esri/views/MapView",
             "esri/layers/FeatureLayer",
-            "esri/widgets/Search"
-        ], function(Map, MapView, FeatureLayer, Search) {
+            "esri/widgets/Search",
+            "esri/widgets/Locate"
+        ], function(Map, MapView, FeatureLayer, Search, Locate) {
             const map = new Map({
                 basemap: "topo-vector"
             });
@@ -48,7 +49,7 @@
             });
 
             const parksLayer = new FeatureLayer({
-                url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_Parks/FeatureServer/0"
+                url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_Detailed_Parks/FeatureServer"
             });
 
             map.add(parksLayer);
@@ -67,6 +68,16 @@
                 }]
             });
 
+            // Add Locate widget (Zoom to My Location)
+            const locateWidget = new Locate({
+                view: view
+            });
+
+            view.ui.add(locateWidget, "top-left");
+
+            // Update the view to center on Idaho
+            view.center = [-114.7420, 44.0682]; // Longitude, Latitude of Idaho
+            view.zoom = 6; // Adjust zoom level for Idaho
             view.ui.add(searchWidget, "top-right");
         });
     </script>
