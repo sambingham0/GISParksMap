@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>National and State Parks Map</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.26/"></script>
+    <style>
+        html, body, #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+        #searchDiv {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 99;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="viewDiv"></div>
+
+    <script>
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/FeatureLayer",
+            "esri/widgets/Search"
+        ], function(Map, MapView, FeatureLayer, Search) {
+            const map = new Map({
+                basemap: "topo-vector"
+            });
+
+            const view = new MapView({
+                container: "viewDiv",
+                map: map,
+                center: [-98.5795, 39.8283], // Centered on the USA
+                zoom: 4
+            });
+
+            const parksLayer = new FeatureLayer({
+                url: "https://services.arcgis.com/example/arcgis/rest/services/NationalAndStateParks/FeatureServer/0"
+            });
+
+            map.add(parksLayer);
+
+            const searchWidget = new Search({
+                view: view,
+                allPlaceholder: "Search for parks",
+                sources: [{
+                    layer: parksLayer,
+                    searchFields: ["Name"],
+                    displayField: "Name",
+                    exactMatch: false,
+                    outFields: ["*"],
+                    name: "Parks",
+                    placeholder: "Search for a park!"
+                }]
+            });
+
+            view.ui.add(searchWidget, "top-right");
+        });
+    </script>
+</body>
+</html></html>
