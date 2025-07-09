@@ -3,83 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>National and State Parks Map</title>
+    <meta name="description" content="Explore Idaho's national and state parks with our interactive map. Find parks, get directions, and discover natural treasures.">
+    <meta name="keywords" content="Idaho, parks, national parks, state parks, map, GIS, outdoor recreation">
+    <meta name="author" content="Your Name">
+    
+    <title>Idaho National & State Parks Explorer</title>
+    
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    
     <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/themes/light/main.css">
+    <link rel="stylesheet" href="styles.css">
+    
     <script src="https://js.arcgis.com/4.26/"></script>
-    <style>
-        html, body, #viewDiv {
-            padding: 0;
-            margin: 0;
-            height: 100%;
-            width: 100%;
-        }
-        #searchDiv {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: 99;
-            background: white;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-    </style>
 </head>
 <body>
+    <a href="#main-content" class="sr-only focus-visible">Skip to main content</a>
+    
+    <header class="header" role="banner">
+        <h1>Idaho Parks Explorer</h1>
+        <p>Discover the natural beauty of Idaho's national and state parks</p>
+    </header>
 
-    <div id="viewDiv"></div>
+    <main id="main-content" role="main">
+        <div id="viewDiv" role="application" aria-label="Interactive map of Idaho parks"></div>
+    </main>
 
-    <script>
-        require([
-            "esri/Map",
-            "esri/views/MapView",
-            "esri/layers/FeatureLayer",
-            "esri/widgets/Search",
-            "esri/widgets/Locate"
-        ], function(Map, MapView, FeatureLayer, Search, Locate) {
-            const map = new Map({
-                basemap: "topo-vector"
-            });
+    <div id="loadingSpinner" class="loading-spinner" aria-live="polite" aria-label="Loading park data">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Loading park data...</p>
+    </div>
 
-            const view = new MapView({
-                container: "viewDiv",
-                map: map,
-                center: [-98.5795, 39.8283], // Centered on the USA
-                zoom: 4
-            });
+    <aside id="controlsPanel" class="controls-panel" role="complementary" aria-label="Map controls">
+        <h3>Map Controls</h3>
+        
+        <div class="control-group">
+            <label for="basemapSelect">Choose Basemap:</label>
+            <select id="basemapSelect" aria-describedby="basemap-help">
+                <option value="hybrid">Satellite Hybrid</option>
+                <option value="topo-vector">Topographic</option>
+                <option value="streets-vector">Streets</option>
+                <option value="gray-vector">Light Gray</option>
+                <option value="dark-gray-vector">Dark Gray</option>
+                <option value="oceans">Oceans</option>
+                <option value="osm">OpenStreetMap</option>
+            </select>
+            <small id="basemap-help" class="sr-only">Select different map backgrounds to change the visual appearance</small>
+        </div>
+    </aside>
 
-            const parksLayer = new FeatureLayer({
-                url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_Detailed_Parks/FeatureServer"
-            });
-
-            map.add(parksLayer);
-
-            const searchWidget = new Search({
-                view: view,
-                allPlaceholder: "Search for parks",
-                sources: [{
-                    layer: parksLayer,
-                    searchFields: ["Name"],
-                    displayField: "Name",
-                    exactMatch: false,
-                    outFields: ["*"],
-                    name: "Parks",
-                    placeholder: "Search for a park!"
-                }]
-            });
-
-            // Add Locate widget (Zoom to My Location)
-            const locateWidget = new Locate({
-                view: view
-            });
-
-            view.ui.add(locateWidget, "top-left");
-
-            // Update the view to center on Idaho
-            view.center = [-114.7420, 44.0682]; // Longitude, Latitude of Idaho
-            view.zoom = 6; // Adjust zoom level for Idaho
-            view.ui.add(searchWidget, "top-right");
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
-</html></html>
+</html>
